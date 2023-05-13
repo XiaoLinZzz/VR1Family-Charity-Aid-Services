@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Information</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Private Information</h1>
+        <form action="/donors/private" method="post">
+            <div class="form-group">
+                <label for="donorType">Donor Type:</label>
+                <select class="form-control" id="donorType" name="donorType">
+                    <option value="individual">Individual</option>
+                    <option value="organization">Organization</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nationality">Nationality:</label>
+                <input type="text" class="form-control" id="nationality" placeholder="Enter nationality" name="nationality">
+            </div>
+            <!-- Individual fields -->
+            <div id="individualFields" class="d-none">
+                <h4>Identity Documents</h4>
+                <div id="identityDocuments">
+                    <div class="form-group">
+                        <label for="idDocument${identityDocumentCount}">Identity Document 1:</label>
+                        <input type="text" class="form-control" id="idDocument1" name="idDocument1" placeholder="Enter identity document">
+                    </div>
+                    <div class="form-group">
+                        <label for="expiryDate${identityDocumentCount}">Expiry Date:</label>
+                        <input type="date" class="form-control" id="expiryDate1" name="expiryDate1">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" id="addIdentityDocument">Add Identity Document</button>
+            </div>
+            <!-- Organization fields -->
+            <div id="organizationFields" class="d-none">
+                <div class="form-group">
+                    <label for="abn">Australian Business Number (ABN):</label>
+                    <input type="text" class="form-control" id="abn" name="abn" placeholder="Enter ABN">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Show or hide fields based on donor type
+            function updateFields() {
+                if ($("#donorType").val() === "individual") {
+                    $("#individualFields").removeClass("d-none");
+                    $("#organizationFields").addClass("d-none");
+                } else {
+                    $("#individualFields").addClass("d-none");
+                    $("#organizationFields").removeClass("d-none");
+                }
+            }
+
+            $("#donorType").on("change", updateFields);
+            updateFields();
+
+            // Add identity document fields
+            let identityDocumentCount = 1;
+            $("#addIdentityDocument").on("click", function() {
+                
+                if (identityDocumentCount < 3) {
+                    identityDocumentCount++;
+                    $("#identityDocuments").append(`
+                        <div class="form-group">
+                            <label for="idDocument${identityDocumentCount}">Identity Document                            ${identityDocumentCount}:</label>
+                            <input type="text" class="form-control" id="idDocument${identityDocumentCount}" name="idDocument${identityDocumentCount}" placeholder="Enter identity document">
+                        </div>
+                        <div class="form-group">
+                            <label for="expiryDate${identityDocumentCount}">Expiry Date:</label>
+                            <input type="date" class="form-control" id="expiryDate${identityDocumentCount}" name="expiryDate${identityDocumentCount}">
+                        </div>
+                    `);
+                } else {
+                    alert("You can only add up to 3 identity documents.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Review</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+    <script>
+        async function fetchData() {
+            const response = await fetch('/donor_info');
+            const aidItems = await response.json();
+
+            const table = document.getElementById('donor-info-table');
+            aidItems.forEach(item => {
+                const row = table.insertRow(-1);
+                row.insertCell(0).innerText = item.donorType;
+                row.insertCell(1).innerText = item.name;
+                row.insertCell(2).innerText = item.age;
+                row.insertCell(3).innerText = item.mailingAddress;
+                row.insertCell(4).innerText = item.phoneNumber;
+                row.insertCell(5).innerText = item.email;
+                row.insertCell(6).innerText = item.preferredCommunication;
+            });
+        }
+    </script>
+    <!-- Add Bootstrap JavaScript and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body onload="fetchData()">
+    <div class="container">
+
+        <h1 class="mt-4 mb-4">Category Review </h1> 
+
+
+        <table class="table table-striped" id="donor-info-table">
+            <thead>
+                <tr>
+                    <th>Donor Type</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Mailing Address</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Preferred Communication</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    
+    </div>
+</body>
+</html>
