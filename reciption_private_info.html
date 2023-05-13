@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Information of Aid Recipients</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            color: #007bff;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .home-btn:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-4 mb-4">Private Information of Aid Recipients</h1>
+        <div class="form-container">
+            <form action="/recp/private" method="post">
+                <div class="form-group">
+                    <label for="nationality">Nationality:</label>
+                    <input type="text" class="form-control" id="nationality" name="nationality" required>
+                </div>
+                <div class="form-group">
+                    <label for="identity-documents">Identity Documents:</label>
+                    <input type="file" class="form-control-file" id="identity-documents" name="files" accept="image/*" multiple>
+                </div>
+                <div id="identity-document-fields">
+                    <div class="form-group">
+                        <label for="document-1-number">Document 1 Number:</label>
+                        <input type="text" class="form-control" id="document-1-number" name="document-1-number">
+                    </div>
+                    <div class="form-group">
+                        <label for="document-1-expiry">Document 1 Expiry Date:</label>
+                        <input type="date" class="form-control" id="document-1-expiry" name="document-1-expiry">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-secondary" onclick="addIdentityDocumentFields()">Add Another Identity Document</button>
+                </div>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        let documentCount = 1;
+        function addIdentityDocumentFields() {
+            if (documentCount >= 3) return;
+            documentCount++;
+
+            const newDocumentFields = `
+                <div class="form-group">
+                    <label for="document-${documentCount}-number">Document ${documentCount} Number:</label>
+                    <input type="text" class="form-control" id="document-${documentCount}-number" name="document-${documentCount}-number">
+                </div>
+                <div class="form-group">
+                    <label for="document-${documentCount}-expiry">Document ${documentCount} Expiry Date:</label>
+                    <input type="date" class="form-control" id="document-${documentCount}-expiry" name="document-${documentCount}-expiry">
+                </div>
+            `;
+
+            document.getElementById('identity-document-fields').insertAdjacentHTML('beforeend', newDocumentFields);
+        }
+    </script>
+
+    <button class="home-btn" onclick="window.open('/', '_self')">
+        <i class="fas fa-home"></i>
+    </button>
+</body>
+</html>

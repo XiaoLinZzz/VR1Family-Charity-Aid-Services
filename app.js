@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/aidManagement', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -82,13 +85,41 @@ const PublicDonorSchema = new mongoose.Schema({
     }
 });
 
+
+const PublicRecipientSchema = new mongoose.Schema({
+    principalRecipient: String,
+    age: Number,
+    previousAddress: String,
+    totalFamilyMembers: Number,
+    commonLawPartner: String,
+    commonLawPartnerAge: Number,
+    kidsInfo: String,
+});
+
+const DocumentSchema = new mongoose.Schema({
+    number: String,
+    expiry: Date,
+    documentImage: String,
+});
+
+const PrivateRecipientSchema = new mongoose.Schema({
+    nationality: String,
+    identityDocuments: [DocumentSchema],
+});
+
+const PublicRecipient = mongoose.model('PublicRecipient', PublicRecipientSchema);
+const PrivateRecipient = mongoose.model('PrivateRecipient', PrivateRecipientSchema);
+
 const PublicDonor = mongoose.model('PublicDonor', PublicDonorSchema);
 const PrivateDonor = mongoose.model('PrivateDonor', PrivateDonorSchema);
 const AidItem = mongoose.model('AidItem', aidItemSchema);
 
 // Middleware
+// const cors = require('cors');
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Add this line
+// app.use(cors());
 
 // Routes
 app.get('/', (req, res) => {
@@ -102,6 +133,18 @@ app.get('/category_review.html', (req, res) => {
 
 app.get('/about_us.html', (req, res) => {
     res.sendFile(__dirname + '/about_us.html');
+});
+
+app.get('/reciption_general_info.html', (req, res) => {
+    res.sendFile(__dirname + '/reciption_general_info.html');
+});
+
+app.get('/reciption_private_info.html', (req, res) => {
+    res.sendFile(__dirname + '/reciption_private_info.html');
+});
+
+app.get('/reciption_info.html', (req, res) => {
+    res.sendFile(__dirname + '/reciption_info.html');
 });
 
 app.get('/donor_private_information.html', (req, res) => {
@@ -125,6 +168,12 @@ app.get('/donor_info', async (req, res) => {
     const publicDonors = await PublicDonor.find({});
     // const privateDonors = await PrivateDonor.find({});
     res.json(publicDonors);
+});
+
+app.get('/reciption_info', async (req, res) => {
+    const publicRecipients = await PublicRecipient.find({});
+    // const privateRecipients = await PrivateRecipient.find({});
+    res.json(publicRecipients);
 });
 
 app.get('/add-item', (req, res) => {
@@ -168,7 +217,7 @@ app.post('/aid-items', async (req, res) => {
         await aidItem.save();
     }
 
-    res.redirect('/');
+    res.redirect('/category_review.html');
 });
 
 app.post('/donors/general', async (req, res) => {
@@ -229,6 +278,41 @@ app.post('/donors/private', async (req, res) => {
     await privateDonor.save();
 
     res.redirect('/donor_info.html');
+});
+
+app.post('/recp/private', upload.array('identity-documents'), async (req, res) => {
+    const nationality = req.body.nationality;
+    const identityDocuments = req.files;
+    const documentDetails = [];
+
+    for (let i = 1; i <= 3; i++) {
+        const documentNumber = req.body[`document-${i}-number`];
+        const documentExpiry = req.body[`document-${i}-expiry`];
+
+        if (documentNumber && documentExpiry) {
+            documentDetails.push({ number: documentNumber, expiry: documentExpiry });
+        }
+    }
+
+    const privateRecipient = new PrivateRecipient({ nationality, identityDocuments, identityDocuments: documentDetails });
+    await privateRecipient.save();
+
+    res.redirect('/reciption_info.html');
+});
+
+app.post('/recp/general', async (req, res) => {
+    const principalRecipient = req.body.principalRecipient;
+    const age = req.body.age;
+    const previousAddress = req.body.previousAddress;
+    const totalFamilyMembers = req.body.totalFamilyMembers;
+    const commonLawPartner = req.body.commonLawPartner;
+    const commonLawPartnerAge = req.body.commonLawPartnerAge;
+    const kidsInfo = req.body.kidsInfo
+
+    const publicRecipient = new PublicRecipient({ principalRecipient, age, previousAddress, totalFamilyMembers, commonLawPartner, commonLawPartnerAge, kidsInfo });
+    await publicRecipient.save();
+
+    res.redirect('/reciption_info.html');
 });
 
 

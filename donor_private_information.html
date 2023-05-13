@@ -5,15 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Private Information</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
+        }
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            color: #007bff;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .home-btn:hover {
+            color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Private Information</h1>
+        <h1>Private Information of Aid Donors</h1>
         <form action="/donors/private" method="post">
             <div class="form-group">
                 <label for="donorType">Donor Type:</label>
@@ -24,7 +39,7 @@
             </div>
             <div class="form-group">
                 <label for="nationality">Nationality:</label>
-                <input type="text" class="form-control" id="nationality" placeholder="Enter nationality" name="nationality">
+                <input type="text" class="form-control" id="nationality" placeholder="Enter nationality" name="nationality" required>
             </div>
             <!-- Individual fields -->
             <div id="individualFields" class="d-none">
@@ -39,7 +54,7 @@
                         <input type="date" class="form-control" id="expiryDate1" name="expiryDate1">
                     </div>
                 </div>
-                <button type="button" class="btn btn-secondary" id="addIdentityDocument">Add Identity Document</button>
+                <!-- <button type="button" class="btn btn-secondary" id="addIdentityDocument">Add Identity Document</button> -->
             </div>
             <!-- Organization fields -->
             <div id="organizationFields" class="d-none">
@@ -48,9 +63,18 @@
                     <input type="text" class="form-control" id="abn" name="abn" placeholder="Enter ABN">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="d-flex justify-content-between mt-3">
+                <button type="button" class="btn btn-secondary" id="addIdentityDocument">Add Identity Document</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+            </form>
         </form>
     </div>
+    <button class="home-btn" onclick="window.open('/', '_self')">
+        <i class="fas fa-home"></i>
+    </button>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -4,43 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Aid Item</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            width: 300px;
+        .form-container {
+            width: 100%;
+            max-width: 300px;
             margin: 0 auto;
         }
-        label {
-            margin-top: 10px;
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            color: #007bff;
+            cursor: pointer;
+            transition: color 0.3s;
         }
-        input {
-            margin-top: 5px;
-        }
-        button {
-            margin-top: 10px;
+        .home-btn:hover {
+            color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1 align="center">Add Aid Item</h1>
-    <form action="/aid-items" method="POST">
-        <label for="name">Item Name:</label>
-        <input type="text" name="name" required>
-        <label for="category">Category:</label>
-        <input type="text" name="category" required>
-        <label for="quantity">Quantity:</label>
-        <input type="number" name="quantity" required>
-        <label for="details">Details:</label>
-        <input type="text" name="details" required>
-        <button type="submit">Add Aid Item</button>
-    </form>
-    <form action="/category_review.html" method="GET">
-        <button type="submit">Back to Category Review</button>
-    </form>
+    <div class="container">
+        <h1 class="text-center mt-4 mb-4">Create Aid Category</h1>
+        <div class="form-container">
+            <form action="/aid-items" method="POST">
+                <div class="form-group">
+                    <label for="name">Item Name:</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <input type="text" name="category" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="details">Details:</label>
+                    <input type="text" name="details" class="form-control" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Create Aid Item</button>
+                </div>
+            </form>
+            <div class="text-center mt-2">
+                <form action="/category_review.html" method="GET">
+                    <button type="submit" class="btn btn-secondary">Back to Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Add Home button -->
+    <button class="home-btn" onclick="window.open('/', '_self')">
+        <i class="fas fa-home"></i>
+    </button>
 </body>
 </html>
-

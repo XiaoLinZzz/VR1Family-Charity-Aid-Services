@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Information of Aid Recipients</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            color: #007bff;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .home-btn:hover {
+            color: #0056b3;
+        }
+    </style>
+    <script>
+        async function fetchData() {
+            const response = await fetch('/reciption_info');
+            const aidItems = await response.json();
+
+            const table = document.getElementById('recip-info-table');
+            aidItems.forEach(item => {
+                const row = table.insertRow(-1);
+                row.insertCell(0).innerText = item.principalRecipient;
+                row.insertCell(1).innerText = item.age;
+                row.insertCell(2).innerText = item.previousAddress;
+                row.insertCell(3).innerText = item.totalFamilyMembers;
+                row.insertCell(4).innerText = item.commonLawPartner;
+                row.insertCell(5).innerText = item.commonLawPartnerAge;
+                row.insertCell(6).innerText = item.kidsInfo;
+            });
+        }
+    </script>
+    <!-- Add Bootstrap JavaScript and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body onload="fetchData()">
+    <div class="container">
+
+        <h1 class="mt-4 mb-4">General Information of Aid Recipients</h1> 
+
+
+        <table class="table table-striped" id="recip-info-table">
+            <thead>
+                <tr>
+                    <th>Principal Recipient</th>
+                    <th>Age</th>
+                    <th>Previous Address</th>
+                    <th>Total Family Members</th>
+                    <th>Common Law Partner</th>
+                    <th>Common Law Partner Age</th>
+                    <th>Kids Info</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    
+    </div>
+
+    <!-- Add Home button -->
+    <button class="home-btn" onclick="window.open('/', '_self')">
+        <i class="fas fa-home"></i>
+    </button>
+</body>
+</html>
