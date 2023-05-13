@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Existing Aid Item</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            margin: 0 auto;
+        }
+        label {
+            margin-top: 10px;
+        }
+        select, input {
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        async function fetchCategories() {
+            const response = await fetch('/aid-categories');
+            const categories = await response.json();
+
+            const selectElement = document.getElementById('category');
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.text = category;
+                selectElement.add(option);
+            });
+        }
+    </script>
+</head>
+<body onload="fetchCategories()">
+    <h1>Add Existing Aid Item</h1>
+    <form action="/aid-items" method="POST">
+        <label for="name">Item Name:</label>
+        <input type="text" name="name" required>
+        <label for="category">Category:</label>
+        <select name="category" id="category" required>
+            <option value="" disabled selected>Select a category</option>
+        </select>
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" required>
+        <button type="submit">Add Existing Aid Item</button>
+    </form>
+    <form action="/" method="GET">
+        <button type="submit">Back to Category Review</button>
+    </form>
+</body>
+</html>

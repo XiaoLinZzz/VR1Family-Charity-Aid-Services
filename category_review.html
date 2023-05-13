@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Review</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #addItemButton {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        async function fetchData() {
+            const response = await fetch('/aid-items');
+            const aidItems = await response.json();
+
+            const table = document.getElementById('aid-items-table');
+            aidItems.forEach(item => {
+                const row = table.insertRow(-1);
+                row.insertCell(0).innerText = item.name;
+                row.insertCell(1).innerText = item.category;
+                row.insertCell(2).innerText = item.quantity;
+            });
+        }
+    </script>
+</head>
+<body onload="fetchData()">
+    <h1>Category Review</h1>
+    <table id="aid-items-table">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <!-- Add the button -->
+    <form action="/add-item" method="GET">
+        <button type="submit" id="addItemButton">Create Category</button>
+    </form>
+    <form action="/add-existing-item" method="GET">
+        <button type="submit" id="addExistingItemButton">Add Item</button>
+    </form>
+</body>
+</html>
