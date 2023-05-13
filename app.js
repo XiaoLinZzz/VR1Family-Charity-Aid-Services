@@ -11,7 +11,8 @@ mongoose.connect('mongodb://localhost:27017/aidManagement', { useNewUrlParser: t
 const aidItemSchema = new mongoose.Schema({
     name: String,
     category: String,
-    quantity: Number
+    quantity: Number,
+    details: String
 });
 
 const AidItem = mongoose.model('AidItem', aidItemSchema);
@@ -46,13 +47,31 @@ app.get('/aid-categories', async (req, res) => {
 });
 
 app.post('/aid-items', async (req, res) => {
-    const aidItem = new AidItem({
-        name: req.body.name,
+    // Find an existing item with the same name, category, and details
+    const existingItem = await AidItem.findOne({ 
+        name: req.body.name, 
         category: req.body.category,
-        quantity: req.body.quantity
+        details: req.body.details
     });
 
-    await aidItem.save();
+    if (existingItem) {
+        // If the item exists, update its quantity
+        existingItem.quantity += parseInt(req.body.quantity);
+        // print(existingItem.quantity);
+        // console.log(existingItem.quantity);
+        await existingItem.save();
+    } else {
+        // If the item doesn't exist, create a new one
+        const aidItem = new AidItem({
+            name: req.body.name,
+            category: req.body.category,
+            quantity: req.body.quantity,
+            details: req.body.details
+        });
+
+        await aidItem.save();
+    }
+
     res.redirect('/');
 });
 
