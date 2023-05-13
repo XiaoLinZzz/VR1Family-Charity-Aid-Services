@@ -23,6 +23,10 @@ app.use(express.json()); // Add this line
 
 // Routes
 app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/home.html');
+});
+
+app.get('/category_review.html', (req, res) => {
     res.sendFile(__dirname + '/category_review.html');
 });
 

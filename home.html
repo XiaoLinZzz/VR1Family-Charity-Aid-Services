@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .card {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 30px;
+        }
+    </style>
+    <!-- Add Bootstrap JavaScript and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4 mb-4">Homepage</h1>
+        <div class="card-container">
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Page 1</h5>
+                    <p class="card-text">Description of Page 1.</p>
+                    <a href="https://xiaolinzzz20023.wordpress.com/about-us" class="btn btn-primary">Go to Page 1</a>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Page 2</h5>
+                    <p class="card-text">Description of Page 2.</p>
+                    <a href="page2.html" class="btn btn-primary">Go to Page 2</a>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Page 3</h5>
+                    <p class="card-text">Description of Page 3.</p>
+                    <a href="page3.html" class="btn btn-primary">Go to Page 3</a>
+                </div>
+            </div>
+        </div>
+        <!-- Link to Category Review -->
+        <!-- <a href="category_review.html" class="btn btn-secondary mt-4">Category Review</a> -->
+        <button type="submit" class="btn btn-secondary mt-4" onclick="window.open('category_review.html')">Category Review</button>
+    </div>
+</body>
+</html>
