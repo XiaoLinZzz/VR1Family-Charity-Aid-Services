@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Kit</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      form {
+        width: 50%;
+        margin: 0 auto;
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+      input[type='text'],
+      textarea,
+      select {
+        width: 100%;
+        padding: 5px;
+        margin-top: 5px;
+      }
+      input[type='number'] {
+        width: 50%;
+      }
+      input[type='submit'] {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+        float: right;
+      }
+      input[type='submit']:hover {
+        background-color: #45a049;
+      }
+      h1 {
+        text-align: center;
+      }
+      .item-field {
+        margin-bottom: 10px;
+      }
+      #add-more {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+      #add-more:hover {
+        background-color: #0069d9;
+      }
+    </style>
+    <script>
+      async function fetchData() {
+        const response = await fetch('/api/kit-items');
+        const aidItems = await response.json();
+    
+        const selectElements = document.querySelectorAll('select.aid-item');
+        selectElements.forEach(selectElement => {
+          aidItems.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.name;
+            option.text = item.name;
+            selectElement.add(option);
+          });
+        });
+      }
+    
+      function addItemField() {
+        const itemFields = document.getElementById('item-fields');
+        const newItemField = document.createElement('div');
+        newItemField.className = 'item-field';
+        newItemField.innerHTML = `
+          <label for="item_name">Item Name:</label>
+          <select name="item_name" class="aid-item" required>
+          </select>
+          <br><br>
+          <label for="quantity">Quantity to Add:</label>
+          <input type="number" name="quantity" min="1" required>
+          <br><br>
+        `;
+        itemFields.appendChild(newItemField);
+      
+        // Clone options from an existing select element to the new one
+        const existingSelect = document.querySelector('select.aid-item');
+        const newSelect = newItemField.querySelector('select');
+        existingSelect.childNodes.forEach(option => {
+          if (option.tagName === 'OPTION') {
+            newSelect.add(option.cloneNode(true));
+          }
+        });
+      }
+    </script>
+    
+  </head>
+  <body onload="fetchData()">
+    <h1>Create Kit</h1>
+
+    <form action="/create-kit" method="POST">
+      <label for="kit_name">Kit Name:</label>
+      <input type="text" id="kit_name" name="kit_name" required>
+      <br><br>
+
+      <label for="status">Status:</label>
+      <select id="status" name="status" required>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+        <option value="excess">Excess</option>
+      </select>
+      <br><br>
+
+      <div id="item-fields">
+        <div class="item-field">
+          <label for="item_name">Aid Item:</label>
+          <select id="item_name" name="item_name" class="aid-item" required>
+          </select>
+          <br><br>
+          <label for="quantity">Quantity to Add:</label>
+          <input type="number" id="quantity" name="quantity" min="1" required>
+          <br><br>
+        </div>
+      </div>
+      <button type="button" id="add-more" onclick="addItemField()">Add More Items</button>
+      <br>
+      <input type="submit" value="Create Kit">
+    </form>
+  </body>
+</html>

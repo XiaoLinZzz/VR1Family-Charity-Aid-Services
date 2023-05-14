@@ -107,12 +107,40 @@ const PrivateRecipientSchema = new mongoose.Schema({
     identityDocuments: [DocumentSchema],
 });
 
+  
+const kitItemSchema = new mongoose.Schema({
+    itemName: {
+      type: String,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+});
+  
+const kitSchema = new mongoose.Schema({
+    kitName: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ['low', 'medium', 'high', 'excess'],
+      required: true,
+    },
+    items: [kitItemSchema],
+});
+  
+  
+
 const PublicRecipient = mongoose.model('PublicRecipient', PublicRecipientSchema);
 const PrivateRecipient = mongoose.model('PrivateRecipient', PrivateRecipientSchema);
-
 const PublicDonor = mongoose.model('PublicDonor', PublicDonorSchema);
 const PrivateDonor = mongoose.model('PrivateDonor', PrivateDonorSchema);
 const AidItem = mongoose.model('AidItem', aidItemSchema);
+const Kit = mongoose.model('Kit', kitSchema);
+
 
 // Middleware
 // const cors = require('cors');
@@ -159,6 +187,18 @@ app.get('/donor_info.html', (req, res) => {
     res.sendFile(__dirname + '/donor_info.html');
 });
 
+app.get('/create_kit.html', (req, res) => {
+    res.sendFile(__dirname + '/create_kit.html');
+});
+
+app.get('/kit_review.html', (req, res) => {
+    res.sendFile(__dirname + '/kit_review.html');
+});
+
+app.get('/items_in_kit.html', (req, res) => {
+    res.sendFile(__dirname + '/items_in_kit.html');
+});
+
 app.get('/aid-items', async (req, res) => {
     const aidItems = await AidItem.find({});
     res.json(aidItems);
@@ -174,6 +214,28 @@ app.get('/reciption_info', async (req, res) => {
     const publicRecipients = await PublicRecipient.find({});
     // const privateRecipients = await PrivateRecipient.find({});
     res.json(publicRecipients);
+});
+
+
+app.get('/api/kit-items', async (req, res) => {
+    try {
+      const items = await AidItem.find({});
+      res.json(items);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'An error occurred while fetching items' });
+    }
+});
+
+
+app.get('/api/kits', async (req, res) => {
+    try {
+        const kits = await Kit.find({});
+        res.json(kits);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching kits' });
+    }
 });
 
 app.get('/add-item', (req, res) => {
@@ -314,6 +376,26 @@ app.post('/recp/general', async (req, res) => {
 
     res.redirect('/reciption_private_info.html');
 });
+
+app.post('/create-kit', async (req, res) => {
+    const { kit_name, status, item_name, quantity } = req.body;
+
+    const items = [];
+
+    // Check if there's only one item and convert it into an array
+    const itemNameArray = Array.isArray(item_name) ? item_name : [item_name];
+    const quantityArray = Array.isArray(quantity) ? quantity.map(q => parseInt(q)) : [parseInt(quantity)];
+
+    for (let i = 0; i < itemNameArray.length; i++) {
+        items.push({ itemName: itemNameArray[i], quantity: quantityArray[i] });
+    }
+
+    const kit = new Kit({ kitName: kit_name, status, items });
+    await kit.save();
+
+    res.redirect('/kit_review.html');
+});
+
 
 
 
