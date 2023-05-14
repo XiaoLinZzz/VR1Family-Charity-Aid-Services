@@ -131,7 +131,23 @@ const kitSchema = new mongoose.Schema({
     },
     items: [kitItemSchema],
 });
-  
+
+
+const request_kitSchema = new mongoose.Schema({
+    request_name: {
+        type: String,
+        required: true,
+    },
+    kit_name: {
+        type: String,
+        required: true,
+    },
+    quantity: {
+        type: Number,
+        required: true,
+    },
+});
+
   
 
 const PublicRecipient = mongoose.model('PublicRecipient', PublicRecipientSchema);
@@ -140,6 +156,7 @@ const PublicDonor = mongoose.model('PublicDonor', PublicDonorSchema);
 const PrivateDonor = mongoose.model('PrivateDonor', PrivateDonorSchema);
 const AidItem = mongoose.model('AidItem', aidItemSchema);
 const Kit = mongoose.model('Kit', kitSchema);
+const Requestkit = mongoose.model('Request_kit', request_kitSchema);
 
 
 // Middleware
@@ -154,10 +171,17 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/home.html');
 });
 
+app.get('/request_category.html', (req, res) => {
+    res.sendFile(__dirname + '/request_category.html');
+});
+
 app.get('/category_review.html', (req, res) => {
     res.sendFile(__dirname + '/category_review.html');
 });
 
+app.get('/request_kit.html', (req, res) => {
+    res.sendFile(__dirname + '/request_kit.html');
+});
 
 app.get('/about_us.html', (req, res) => {
     res.sendFile(__dirname + '/about_us.html');
@@ -199,6 +223,17 @@ app.get('/items_in_kit.html', (req, res) => {
     res.sendFile(__dirname + '/items_in_kit.html');
 });
 
+app.get('/api/find-kits', async (req, res) => {
+    try {
+        const kits = await Kit.find({});
+        res.json(kits);
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'An error occurred while fetching kits' });
+        }
+});
+
+
 app.get('/aid-items', async (req, res) => {
     const aidItems = await AidItem.find({});
     res.json(aidItems);
@@ -231,6 +266,7 @@ app.get('/api/kit-items', async (req, res) => {
 app.get('/api/kits', async (req, res) => {
     try {
         const kits = await Kit.find({});
+        // console.log(kits);
         res.json(kits);
     } catch (err) {
         console.error(err);
@@ -246,6 +282,33 @@ app.get('/add-item', (req, res) => {
 app.get('/add-existing-item', (req, res) => {
     res.sendFile(__dirname + '/add_existing_item.html');
 });
+
+app.get('/api/categories', async (req, res) => {
+    try {
+        const categories = await AidItem.find({}).distinct('category');
+        // console.log(categories);
+        res.json(categories);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching categories' });
+    }
+});
+
+app.get('/api/items', async (req, res) => {
+    try {
+      const categoryId = req.query.category_id;
+      if (!categoryId) {
+        return res.status(400).json({ error: 'category_id is required' });
+      }
+  
+      const items = await AidItem.find({ category: mongoose.Types.ObjectId(categoryId) });
+      res.json(items);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'An error occurred while fetching items' });
+    }
+});
+
 
 app.get('/aid-categories', async (req, res) => {
     const aidItems = await AidItem.find({});
@@ -395,6 +458,26 @@ app.post('/create-kit', async (req, res) => {
 
     res.redirect('/kit_review.html');
 });
+
+app.post('/request-kit', async (req, res) => {
+    const { request_name, kit_name, quantity } = req.body;
+
+    // Check if kit_name and quantity are arrays
+    if (Array.isArray(kit_name) && Array.isArray(quantity)) {
+        // Iterate through kit_name and quantity arrays and save each requested kit
+        for (let i = 0; i < kit_name.length; i++) {
+            const request_kit = new Requestkit({ request_name, kit_name: kit_name[i], quantity: quantity[i] });
+            await request_kit.save();
+        }
+    } else {
+        // If only a single kit is requested, save it
+        const request_kit = new Requestkit({ request_name, kit_name, quantity });
+        await request_kit.save();
+    }
+
+    res.redirect('/');
+});
+
 
 
 

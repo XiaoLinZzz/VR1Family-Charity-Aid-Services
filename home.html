@@ -127,7 +127,7 @@
             }
 
             // Bind the openInfoPage function to the Info buttons
-            $("#recipientsInfoBtn, #donorsInfoBtn").on("click", function () {
+            $("#recipientsInfoBtn, #donorsInfoBtn, #kit_info, #Category_info").on("click", function () {
                 openInfoPage($(this).data("page-url"));
             });
         });
@@ -174,6 +174,7 @@
                     </div>
                 </div>
             </div>
+            
             <!-- Card 3 -->
             <div class="card">
                 <div class="card-body">
@@ -196,7 +197,7 @@
                     <h5 class="card-title">Kit Management</h5>
                     <p class="card-text">Description of Kit Management.</p>
                     <button type="submit" class="btn btn-primary" onclick="location.href='request_kit.html'">Request</button>
-                    <button type="submit" class="btn btn-primary" onclick="location.href='kit_review.html'">Go to Kit Management</button>
+                    <button type="submit" class="btn btn-primary" id="kit_info" data-page-url='kit_review.html'>Go to Kit Management</button>
                 </div>
             </div>
 
@@ -205,7 +206,7 @@
                     <h5 class="card-title">Category Review</h5>
                     <p class="card-text">Description of Kit Management.</p>
                     <button type="submit" class="btn btn-primary" onclick="location.href='request_category.html'">Request</button>
-                    <button type="submit" class="btn btn-primary" onclick="location.href='category_review.html';">Go to Category Management</button>
+                    <button type="submit" class="btn btn-primary" id="Category_info" data-page-url='category_review.html';>Go to Category Management</button>
                 </div>
                 
             </div>

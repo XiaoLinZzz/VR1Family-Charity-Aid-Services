@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Request Kit</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      form {
+        width: 50%;
+        margin: 0 auto;
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+      input[type='text'],
+      textarea,
+      select {
+        width: 100%;
+        padding: 5px;
+        margin-top: 5px;
+      }
+      input[type='number'] {
+        width: 50%;
+      }
+      input[type='submit'] {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+        float: right;
+      }
+      input[type='submit']:hover {
+        background-color: #45a049;
+      }
+      h1 {
+        text-align: center;
+      }
+      .item-field {
+        margin-bottom: 10px;
+      }
+      #add-more {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+      #add-more:hover {
+        background-color: #0069d9;
+      }
+    </style>
+    <script>
+        async function fetchData() {
+            const response = await fetch('/api/kits');
+            const kits = await response.json();
+            
+            const kit_name = [];
+            kits.forEach(kit => {
+                kit_name.push(kit.kitName);
+            });
+
+            const selectElements = document.querySelectorAll('select.kit-item');
+            selectElements.forEach(selectElement => {
+                kit_name.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                option.text = item;
+                selectElement.add(option);
+              });
+            });
+          }
+    
+      function addItemField() {
+        const itemFields = document.getElementById('item-fields');
+        const newItemField = document.createElement('div');
+        newItemField.className = 'item-field';
+        newItemField.innerHTML = `
+          <label for="kit_name">Kit Name:</label>
+          <select name="kit_name" class="kit-item" required>
+          </select>
+          <br><br>
+          <label for="quantity">Quantity to Add:</label>
+          <input type="number" name="quantity" min="1" required>
+          <br><br>
+        `;
+        itemFields.appendChild(newItemField);
+      
+        // Clone options from an existing select element to the new one
+        const existingSelect = document.querySelector('select.kit-item');
+        const newSelect = newItemField.querySelector('select');
+        existingSelect.childNodes.forEach(option => {
+          if (option.tagName === 'OPTION') {
+            newSelect.add(option.cloneNode(true));
+          }
+        });
+      }
+
+      async function submitForm(form) {
+        event.preventDefault();
+      
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // Handle multiple kit items
+        if (!Array.isArray(data.kit_name)) {
+            data.kit_name = [data.kit_name];
+        }
+        if (!Array.isArray(data.quantity)) {
+            data.quantity = [data.quantity];
+        }
+      
+        try {
+          const response = await fetch('/request-kit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify(data)
+          });
+      
+          if (response.ok) {
+            // Show a success message
+            alert('Request submitted successfully.');
+            // Redirect to the home page
+            window.location.href = '/';
+          } else {
+            // Show an error message if the response is not ok
+            alert('Error submitting request. Please try again.');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          // Show an error message if there's an exception
+          alert('Error submitting request. Please try again.');
+        }
+      
+        return false;
+      }
+      
+    </script>
+    
+  </head>
+  <body onload="fetchData()">
+    <h1>Request Kit</h1>
+
+    <form action="/request-kit" method="POST" onsubmit="return submitForm(this)">
+      <label for="request_name">Your Name:</label>
+      <input type="text" id="request_name" name="request_name" required>
+      <br><br>
+
+      <div id="item-fields">
+        <div class="item-field">
+          <label for="kit_name">Kit Item:</label>
+          <select id="kit_name" name="kit_name" class="kit-item" required>
+          </select>
+          <br><br>
+          <label for="quantity">Quantity:</label>
+          <input type="number" id="quantity" name="quantity" min="1" required>
+          <br><br>
+        </div>
+      </div>
+      <button type="button" id="add-more" onclick="addItemField()">Request More Kits</button>
+      <br>
+      <input type="submit" value="Create Kit">
+    </form>
+  </body>
+</html>
