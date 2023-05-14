@@ -6,7 +6,7 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/aidManagement', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://xiaolinzzz2002:Mlj20020716@cluster0.buhizxf.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Failed to connect to MongoDB:', err));
 
