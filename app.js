@@ -242,7 +242,7 @@ app.post('/donors/general', async (req, res) => {
 
     // console.log(publicDonor);
 
-    res.redirect('/donor_info.html');
+    res.redirect('/donor_private_information.html');
 });
 
 app.post('/donors/private', async (req, res) => {
@@ -312,7 +312,7 @@ app.post('/recp/general', async (req, res) => {
     const publicRecipient = new PublicRecipient({ principalRecipient, age, previousAddress, totalFamilyMembers, commonLawPartner, commonLawPartnerAge, kidsInfo });
     await publicRecipient.save();
 
-    res.redirect('/reciption_info.html');
+    res.redirect('/donor_private_information.html');
 });
 
 
