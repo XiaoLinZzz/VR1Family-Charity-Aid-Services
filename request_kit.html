@@ -110,23 +110,38 @@
         event.preventDefault();
       
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
-        // Handle multiple kit items
-        if (!Array.isArray(data.kit_name)) {
-            data.kit_name = [data.kit_name];
+      
+        // Retrieve request_name from formData
+        const request_name = formData.get('request_name');
+      
+        // Retrieve all kit_name and quantity input fields
+        const kit_nameFields = form.querySelectorAll('select[name="kit_name"]');
+        const quantityFields = form.querySelectorAll('input[name="quantity"]');
+      
+        // Create an array for kit_item
+        const kit_item = [];
+      
+        // Iterate over kit_name and quantity input fields to create kit_item objects
+        for (let i = 0; i < kit_nameFields.length; i++) {
+          kit_item.push({
+            itemName: kit_nameFields[i].value,
+            quantity: parseInt(quantityFields[i].value),
+          });
         }
-        if (!Array.isArray(data.quantity)) {
-            data.quantity = [data.quantity];
-        }
+      
+        // Create the request body object
+        const data = {
+          request_name,
+          kit_item,
+        };
       
         try {
           const response = await fetch('/request-kit', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify(data)
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
           });
       
           if (response.ok) {
@@ -146,6 +161,7 @@
       
         return false;
       }
+      
       
     </script>
     

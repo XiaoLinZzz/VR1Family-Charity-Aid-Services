@@ -133,12 +133,8 @@ const kitSchema = new mongoose.Schema({
 });
 
 
-const request_kitSchema = new mongoose.Schema({
-    request_name: {
-        type: String,
-        required: true,
-    },
-    kit_name: {
+const requestkititemSchema = new mongoose.Schema({
+    itemName: {
         type: String,
         required: true,
     },
@@ -147,6 +143,50 @@ const request_kitSchema = new mongoose.Schema({
         required: true,
     },
 });
+
+const request_kitSchema = new mongoose.Schema({
+    request_name: {
+        type: String,
+        required: true,
+    },
+    kit_item: [requestkititemSchema],
+});
+
+
+const categoriesSchema = new mongoose.Schema({
+    item_name: {
+        type: String,
+        required: true,
+    },
+    quantity: {
+        type: Number,
+        required: true,
+    },
+});
+
+const request_categorySchema = new mongoose.Schema({
+    request_name: {
+        type: String,
+        required: true,
+    },
+    category_name: {
+        type: String,
+        required: true,
+    },
+    item: [
+        {
+            name: {
+                type: String,
+                required: true,
+            },
+            quantity: {
+                type: Number,
+                required: true,
+            },
+        },
+    ],
+});
+
 
   
 
@@ -157,7 +197,9 @@ const PrivateDonor = mongoose.model('PrivateDonor', PrivateDonorSchema);
 const AidItem = mongoose.model('AidItem', aidItemSchema);
 const Kit = mongoose.model('Kit', kitSchema);
 const Requestkit = mongoose.model('Request_kit', request_kitSchema);
-
+const Requestcategory = mongoose.model('Request_category', request_categorySchema);
+const Requestkititem = mongoose.model('Request_kit_item', requestkititemSchema);
+const Categories = mongoose.model('Categories', categoriesSchema);
 
 // Middleware
 // const cors = require('cors');
@@ -294,20 +336,25 @@ app.get('/api/categories', async (req, res) => {
     }
 });
 
+
 app.get('/api/items', async (req, res) => {
     try {
-      const categoryId = req.query.category_id;
-      if (!categoryId) {
-        return res.status(400).json({ error: 'category_id is required' });
-      }
+        const categoryName = req.query.category_id;
+        if (!categoryName) {
+            return res.status(400).json({ error: 'category_id is required' });
+        }
   
-      const items = await AidItem.find({ category: mongoose.Types.ObjectId(categoryId) });
-      res.json(items);
+        const items = await AidItem.find({ category: categoryName });
+        res.json(items);
     } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({ error: 'An error occurred while fetching items' });
+        console.error('Error:', error);
+        res.status(500).json({ error: 'An error occurred while fetching items' });
     }
 });
+
+
+  
+  
 
 
 app.get('/aid-categories', async (req, res) => {
@@ -459,24 +506,38 @@ app.post('/create-kit', async (req, res) => {
     res.redirect('/kit_review.html');
 });
 
+
 app.post('/request-kit', async (req, res) => {
-    const { request_name, kit_name, quantity } = req.body;
+    try {
+        // console.log(req.body);
 
-    // Check if kit_name and quantity are arrays
-    if (Array.isArray(kit_name) && Array.isArray(quantity)) {
-        // Iterate through kit_name and quantity arrays and save each requested kit
-        for (let i = 0; i < kit_name.length; i++) {
-            const request_kit = new Requestkit({ request_name, kit_name: kit_name[i], quantity: quantity[i] });
-            await request_kit.save();
-        }
-    } else {
-        // If only a single kit is requested, save it
-        const request_kit = new Requestkit({ request_name, kit_name, quantity });
-        await request_kit.save();
+        const { request_name, kit_item } = req.body;
+        const newRequestKit = new Requestkit({ request_name, kit_item });
+
+        await newRequestKit.save();
+        res.status(201).json({ message: 'Request kit created successfully', data: newRequestKit });
+    } catch (error) {
+        res.status(400).json({ message: 'Error creating request kit', error: error.message });
     }
-
-    res.redirect('/');
 });
+
+
+
+
+app.post('/request-category', async (req, res) => {
+    try {
+    //   console.log(req.body);
+  
+      const { request_name, category_name, items } = req.body;
+      const newRequestCategory = new Requestcategory({ request_name, category_name, item: items });
+  
+      await newRequestCategory.save();
+      res.status(201).json({ message: 'Request category created successfully', data: newRequestCategory });
+    } catch (error) {
+      res.status(400).json({ message: 'Error creating request category', error: error.message });
+    }
+});
+  
 
 
 

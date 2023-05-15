@@ -79,24 +79,26 @@
         }
       
         async function fetchItems() {
-          const categoryId = document.getElementById('category_name');
+          const categoryId = document.getElementById('category_name').value;
           const response = await fetch(`/api/items?category_id=${categoryId}`);
           const items = await response.json();
-      
+        
           // Update all item selects
           const itemSelects = document.querySelectorAll('select.item-select');
           itemSelects.forEach(itemSelect => {
             // Clear old options
             itemSelect.innerHTML = '';
-      
+        
             items.forEach(item => {
               const option = document.createElement('option');
-              option.value = item.id;
+              option.value = item.name; // Make sure 'id' is the correct property name
               option.text = item.name;
               itemSelect.add(option);
             });
           });
         }
+        
+        
       
         function addItemField() {
           const itemFields = document.getElementById('item-fields');
@@ -125,18 +127,35 @@
       
         async function submitForm(form) {
           event.preventDefault();
-      
+        
           const formData = new FormData(form);
-          const data = Object.fromEntries(formData.entries());
-      
-          // Handle multiple items and quantities
-          if (!Array.isArray(data.item_name)) {
-            data.item_name = [data.item_name];
+        
+          // Retrieve request_name and category_name from formData
+          const request_name = formData.get('request_name');
+          const category_name = formData.get('category_name');
+        
+          // Retrieve all item_name and quantity input fields
+          const item_nameFields = form.querySelectorAll('select[name="item_name"]');
+          const quantityFields = form.querySelectorAll('input[name="quantity"]');
+        
+          // Create an array for items
+          const items = [];
+        
+          // Iterate over item_name and quantity input fields to create items objects
+          for (let i = 0; i < item_nameFields.length; i++) {
+            items.push({
+              name: item_nameFields[i].options[item_nameFields[i].selectedIndex].text,
+              quantity: parseInt(quantityFields[i].value),
+            });
           }
-          if (!Array.isArray(data.quantity)) {
-            data.quantity = [data.quantity];
-          }
-      
+        
+          // Create the request body object
+          const data = {
+            request_name,
+            category_name,
+            items,
+          };
+        
           try {
             const response = await fetch('/request-category', {
               method: 'POST',
@@ -145,7 +164,7 @@
               },
               body: JSON.stringify(data),
             });
-      
+        
             if (response.ok) {
               // Show a success message
               alert('Request submitted successfully.');
@@ -160,9 +179,10 @@
             // Show an error message if there's an exception
             alert('Error submitting request. Please try again.');
           }
-      
+        
           return false;
         }
+        
       </script>
       
 
