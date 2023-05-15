@@ -36,10 +36,10 @@
             aidItems.forEach(item => {
                 const row = table.insertRow(-1);
                 row.insertCell(0).innerText = item.kitName;
-                row.insertCell(1).innerText = item.status;
+                // row.insertCell(1).innerText = item.status;
                 
                 const itemsString = item.items.map(i => `${i.itemName}: ${i.quantity}`).join(', ');
-                row.insertCell(2).innerText = itemsString;
+                row.insertCell(1).innerText = itemsString;
             });
         }
     </script>
@@ -56,7 +56,7 @@
             <thead>
                 <tr>
                     <th>kit Name</th>
-                    <th>Status</th>
+                    <!-- <th>Status</th> -->
                     <th>Items, Quantity</th>
                 </tr>
             </thead>

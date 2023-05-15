@@ -124,11 +124,11 @@ const kitSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    status: {
-      type: String,
-      enum: ['low', 'medium', 'high', 'excess'],
-      required: true,
-    },
+    // status: {
+    //   type: String,
+    //   enum: ['low', 'medium', 'high', 'excess'],
+    //   required: true,
+    // },
     items: [kitItemSchema],
 });
 
@@ -488,7 +488,7 @@ app.post('/recp/general', async (req, res) => {
 });
 
 app.post('/create-kit', async (req, res) => {
-    const { kit_name, status, item_name, quantity } = req.body;
+    const { kit_name, item_name, quantity } = req.body;
 
     const items = [];
 
@@ -500,7 +500,7 @@ app.post('/create-kit', async (req, res) => {
         items.push({ itemName: itemNameArray[i], quantity: quantityArray[i] });
     }
 
-    const kit = new Kit({ kitName: kit_name, status, items });
+    const kit = new Kit({ kitName: kit_name, items });
     await kit.save();
 
     res.redirect('/kit_review.html');
