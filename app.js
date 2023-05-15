@@ -193,8 +193,8 @@ app.get('/aid-categories', async (req, res) => {
 
 app.post('/aid-items', async (req, res) => {
     // Find an existing item with the same name, category, and details
-    const existingItem = await AidItem.findOne({ 
-        name: req.body.name, 
+    const existingItem = await AidItem.findOne({
+        name: req.body.name,
         category: req.body.category,
         details: req.body.details
     });
@@ -323,3 +323,5 @@ const url = process.env.URL || 'http://localhost';
 app.listen(port, () => {
     console.log(`Server is running on ${url}:${port}`);
 });
+
+// just a test review
