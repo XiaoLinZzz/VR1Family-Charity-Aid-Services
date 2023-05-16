@@ -1,0 +1,47 @@
+# VR1Family Charity Aid Services Web Application
+
+## Installation
+1. Make sure you have [Node.js](https://nodejs.org/en) and [MongoDB](https://www.mongodb.com/) installed on your machine.
+
+2. Clone the repository:
+```
+git clone https://github.com/XiaoLinZzz/VR1Family-Charity-Aid-Services.git
+```
+
+3. Navigate to the project directory and install dependencies:
+```
+cd aid-distribution-platform
+npm install
+```
+
+4. Create a .env file in the root folder of the project and add the following environment variables:
+```
+PORT=3001
+URL=http://localhost
+MONGO_URI=<your_mongodb_connection_string>
+```
+Replace `<your_mongodb_connection_string>` with the connection string for your MongoDB database.
+
+5. Start the server:
+```
+npm start
+```
+The server should now be running on `http://localhost:3001`.
+
+
+## Contributing
+1. Fork the project repository and create a new branch for your feature or bugfix.
+
+2. Make your changes and commit them to your branch.
+
+3. Push your branch to your forked repository on GitHub.
+
+4. Create a pull request to merge your changes into the main repository.
+
+5. Once your pull request is reviewed and approved, it will be merged into the main repository.
+
+Please follow the code style and conventions already present in the project.
+
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
