@@ -7,6 +7,7 @@
 ![Node.js](https://img.shields.io/static/v1?label=Node.js&message=v14.16.0&color=339933&style=for-the-badge&logo=Node.js)
 ![MongoDB](https://img.shields.io/static/v1?label=MongoDB&message=v4.4.4&color=47A248&style=for-the-badge&logo=MongoDB)
 ![Express](https://img.shields.io/static/v1?label=Express&message=v4.17.1&color=000000&style=for-the-badge&logo=Express)
+![Heroku](https://img.shields.io/static/v1?label=Express&message=V8.1.3&color=430098&style=for-the-badge&logo=Heroku)
 
 
 ## Features
@@ -15,6 +16,10 @@
 - Manage recipient information, including general and private data
 - View and manage aid categories and their respective quantities and statuses
 - Basic user interface for easy navigation and data management
+
+
+## Try our application
+Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/).
 
 
 ## Installation
