@@ -19,7 +19,7 @@
 
 
 ## Try our application
-Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/).
+Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/). (Due to there is a charge for using Heroku, our demo will expire in June 2023.)
 
 
 ## Installation
