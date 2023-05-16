@@ -1,6 +1,6 @@
 # VR1Family Charity Aid Services Web Application
 
-2023 s1 SWEN90016 Software Processes and Management @ The University of Melbourne
+This repository is our final project for the course [SWEN90016 Software Processes and Management](https://handbook.unimelb.edu.au/2023/subjects/swen90016). It is a web application for a charity aid service provider, which allows the organization to manage aid items, aid kits, and recipient information. The application is built using the MERN stack (MongoDB, Express, React, Node.js).
 
 ## Tech
 
