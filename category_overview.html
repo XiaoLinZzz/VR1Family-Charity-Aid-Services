@@ -75,6 +75,18 @@
                 <!-- Category data will be dynamically populated here -->
             </tbody>
         </table>
+
+        <div class="mt-4">
+            <p><strong>Note:</strong> The status of each category is determined based on its quantity, using the following criteria:</p>
+            <ul>
+                <li><strong>Low</strong>: Quantity is between 0 and 100 (inclusive).</li>
+                <li><strong>Medium</strong>: Quantity is greater than 100 and less than or equal to 200.</li>
+                <li><strong>High</strong>: Quantity is greater than 200 and less than or equal to 300.</li>
+                <li><strong>Excess</strong>: Quantity is greater than 300.</li>
+            </ul>
+            <!-- <p>This helps to easily identify the availability and demand for each category.</p> -->
+        </div>
+
     </div>
     <!-- Add Home button -->
     <button class="home-btn" onclick="window.open('/', '_self')">
