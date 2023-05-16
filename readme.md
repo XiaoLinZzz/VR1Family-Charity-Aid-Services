@@ -1,5 +1,15 @@
 # VR1Family Charity Aid Services Web Application
 
+
+## Tech
+
+![VScode](https://img.shields.io/static/v1?label=VScode&message=v1.72&color=3374FF&style=for-the-badge&logo=Visual-Studio-Code)
+![Node.js](https://img.shields.io/static/v1?label=Node.js&message=v14.16.0&color=339933&style=for-the-badge&logo=Node.js)
+![MongoDB](https://img.shields.io/static/v1?label=MongoDB&message=v4.4.4&color=47A248&style=for-the-badge&logo=MongoDB)
+![Express](https://img.shields.io/static/v1?label=Express&message=v4.17.1&color=000000&style=for-the-badge&logo=Express)
+
+
+
 ## Installation
 1. Make sure you have [Node.js](https://nodejs.org/en) and [MongoDB](https://www.mongodb.com/) installed on your machine.
 
