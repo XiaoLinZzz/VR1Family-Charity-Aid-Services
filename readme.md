@@ -9,6 +9,13 @@
 ![Express](https://img.shields.io/static/v1?label=Express&message=v4.17.1&color=000000&style=for-the-badge&logo=Express)
 
 
+## Features
+- Manage aid items, including name, category, quantity, and details
+- Manage aid kits, which are collections of aid items
+- Manage recipient information, including general and private data
+- View and manage aid categories and their respective quantities and statuses
+- Basic user interface for easy navigation and data management
+
 
 ## Installation
 1. Make sure you have [Node.js](https://nodejs.org/en) and [MongoDB](https://www.mongodb.com/) installed on your machine.
@@ -37,6 +44,7 @@ Replace `<your_mongodb_connection_string>` with the connection string for your M
 npm start
 ```
 The server should now be running on `http://localhost:3001`.
+
 
 
 ## Contributing
