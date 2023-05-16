@@ -1,5 +1,6 @@
 # VR1Family Charity Aid Services Web Application
 
+2023 s1 SWEN90016 Software Processes and Management @ The University of Melbourne
 
 ## Tech
 
@@ -32,7 +33,7 @@ git clone https://github.com/XiaoLinZzz/VR1Family-Charity-Aid-Services.git
 
 3. Navigate to the project directory and install dependencies:
 ```
-cd aid-distribution-platform
+cd VR1Family-Charity-Aid-Services
 npm install
 ```
 
