@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
+
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://xiaolinzzz2002:Mlj20020716@cluster0.buhizxf.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
