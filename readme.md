@@ -11,16 +11,16 @@ This repository is our final project for the course [SWEN90016 Software Processe
 ![Heroku](https://img.shields.io/static/v1?label=Express&message=V8.1.3&color=430098&style=for-the-badge&logo=Heroku)
 
 
+## Try our application
+Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/). (Due to there is a charge for using Heroku, our demo will expire in June 2023.)
+
+
 ## Features
 - Manage aid items, including name, category, quantity, and details
 - Manage aid kits, which are collections of aid items
 - Manage recipient information, including general and private data
 - View and manage aid categories and their respective quantities and statuses
 - Basic user interface for easy navigation and data management
-
-
-## Try our application
-Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/). (Due to there is a charge for using Heroku, our demo will expire in June 2023.)
 
 
 ## Installation
