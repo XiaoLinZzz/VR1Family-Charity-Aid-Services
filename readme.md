@@ -12,6 +12,10 @@ This repository is our final project for the course [SWEN90016 Software Processe
 
 
 ## Try our application
+
+<!-- add screenshot -->
+![screenshot](image/screenshot.png)
+
 Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/). (Due to there is a charge for using Heroku, our demo will expire in June 2023.)
 
 
