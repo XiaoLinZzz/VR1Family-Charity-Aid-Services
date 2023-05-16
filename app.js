@@ -223,6 +223,14 @@ app.get('/request_category.html', (req, res) => {
     res.sendFile(__dirname + '/request_category.html');
 });
 
+app.get('/image/download.png', (req, res) => {
+    res.sendFile(__dirname + '/image/download.png');
+});
+
+app.get('/image/service.jpeg', (req, res) => {
+    res.sendFile(__dirname + '/image/service.jpeg');
+});
+
 app.get('/category_overview.html', (req, res) => {
     res.sendFile(__dirname + '/category_overview.html');
 });
