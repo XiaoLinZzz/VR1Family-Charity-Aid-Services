@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Overview</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            color: #007bff;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .home-btn:hover {
+            color: #0056b3;
+        }
+    </style>
+    <script>
+        // Fetch category data from the server and populate the table
+        fetch('/api/get-categories')
+            .then(response => response.json())
+            .then(data => {
+                const categoryTableBody = document.getElementById('categoryTableBody');
+    
+                // Iterate over the categories and create table rows
+                data.forEach(category => {
+                    const row = document.createElement('tr');
+                    const categoryCell = document.createElement('td');
+                    const quantityCell = document.createElement('td');
+                    const statusCell = document.createElement('td');
+    
+                    categoryCell.textContent = category.category;
+                    quantityCell.textContent = category.quantity;
+                    statusCell.textContent = category.status;
+    
+                    row.appendChild(categoryCell);
+                    row.appendChild(quantityCell);
+                    row.appendChild(statusCell);
+    
+                    categoryTableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error(error));
+    </script>
+    
+    <!-- Add Bootstrap JavaScript and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4 mb-4">Category Overview</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="categoryTableBody">
+                <!-- Category data will be dynamically populated here -->
+            </tbody>
+        </table>
+
+        <div class="mt-4">
+            <p><strong>Note:</strong> The status of each category is determined based on its quantity, using the following criteria:</p>
+            <ul>
+                <li><strong>Low</strong>: Quantity is between 0 and 100 (inclusive).</li>
+                <li><strong>Medium</strong>: Quantity is greater than 100 and less than or equal to 200.</li>
+                <li><strong>High</strong>: Quantity is greater than 200 and less than or equal to 300.</li>
+                <li><strong>Excess</strong>: Quantity is greater than 300.</li>
+            </ul>
+            <!-- <p>This helps to easily identify the availability and demand for each category.</p> -->
+        </div>
+
+    </div>
+    <!-- Add Home button -->
+    <button class="home-btn" onclick="window.open('/', '_self')">
+        <i class="fas fa-home"></i>
+    </button>
+</body>
+</html>

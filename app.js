@@ -6,7 +6,7 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/aidManagement', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://xiaolinzzz2002:Mlj20020716@cluster0.buhizxf.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Failed to connect to MongoDB:', err));
 
@@ -107,12 +107,105 @@ const PrivateRecipientSchema = new mongoose.Schema({
     identityDocuments: [DocumentSchema],
 });
 
+  
+const kitItemSchema = new mongoose.Schema({
+    itemName: {
+      type: String,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+});
+  
+const kitSchema = new mongoose.Schema({
+    kitName: {
+      type: String,
+      required: true,
+    },
+    // status: {
+    //   type: String,
+    //   enum: ['low', 'medium', 'high', 'excess'],
+    //   required: true,
+    // },
+    items: [kitItemSchema],
+});
+
+
+const requestkititemSchema = new mongoose.Schema({
+    itemName: {
+        type: String,
+        required: true,
+    },
+    quantity: {
+        type: Number,
+        required: true,
+    },
+});
+
+const request_kitSchema = new mongoose.Schema({
+    request_name: {
+        type: String,
+        required: true,
+    },
+    kit_item: [requestkititemSchema],
+    details: {
+        type: String,
+    },
+});
+
+
+const categoriesSchema = new mongoose.Schema({
+    item_name: {
+        type: String,
+        required: true,
+    },
+    quantity: {
+        type: Number,
+        required: true,
+    },
+});
+
+const request_categorySchema = new mongoose.Schema({
+    request_name: {
+        type: String,
+        required: true,
+    },
+    category_name: {
+        type: String,
+        required: true,
+    },
+    item: [
+        {
+            name: {
+                type: String,
+                required: true,
+            },
+            quantity: {
+                type: Number,
+                required: true,
+            },
+        },
+    ],
+    details: {
+        type: String,
+    },
+});
+
+
+  
+
 const PublicRecipient = mongoose.model('PublicRecipient', PublicRecipientSchema);
 const PrivateRecipient = mongoose.model('PrivateRecipient', PrivateRecipientSchema);
-
 const PublicDonor = mongoose.model('PublicDonor', PublicDonorSchema);
 const PrivateDonor = mongoose.model('PrivateDonor', PrivateDonorSchema);
 const AidItem = mongoose.model('AidItem', aidItemSchema);
+const Kit = mongoose.model('Kit', kitSchema);
+const Requestkit = mongoose.model('Request_kit', request_kitSchema);
+const Requestcategory = mongoose.model('Request_category', request_categorySchema);
+const Requestkititem = mongoose.model('Request_kit_item', requestkititemSchema);
+const Categories = mongoose.model('Categories', categoriesSchema);
 
 // Middleware
 // const cors = require('cors');
@@ -126,10 +219,30 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/home.html');
 });
 
+app.get('/request_category.html', (req, res) => {
+    res.sendFile(__dirname + '/request_category.html');
+});
+
+app.get('/image/download.png', (req, res) => {
+    res.sendFile(__dirname + '/image/download.png');
+});
+
+app.get('/image/service.jpeg', (req, res) => {
+    res.sendFile(__dirname + '/image/service.jpeg');
+});
+
+app.get('/category_overview.html', (req, res) => {
+    res.sendFile(__dirname + '/category_overview.html');
+});
+
+
 app.get('/category_review.html', (req, res) => {
     res.sendFile(__dirname + '/category_review.html');
 });
 
+app.get('/request_kit.html', (req, res) => {
+    res.sendFile(__dirname + '/request_kit.html');
+});
 
 app.get('/about_us.html', (req, res) => {
     res.sendFile(__dirname + '/about_us.html');
@@ -159,10 +272,68 @@ app.get('/donor_info.html', (req, res) => {
     res.sendFile(__dirname + '/donor_info.html');
 });
 
+app.get('/create_kit.html', (req, res) => {
+    res.sendFile(__dirname + '/create_kit.html');
+});
+
+app.get('/kit_review.html', (req, res) => {
+    res.sendFile(__dirname + '/kit_review.html');
+});
+
+app.get('/items_in_kit.html', (req, res) => {
+    res.sendFile(__dirname + '/items_in_kit.html');
+});
+
+app.get('/api/find-kits', async (req, res) => {
+    try {
+        const kits = await Kit.find({});
+        res.json(kits);
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'An error occurred while fetching kits' });
+        }
+});
+
+
 app.get('/aid-items', async (req, res) => {
     const aidItems = await AidItem.find({});
     res.json(aidItems);
 });
+
+app.get('/api/get-categories', async (req, res) => {
+    try {
+        const categories = await AidItem.find({})
+
+        // Sum up the same category, and set a status
+        const categoryMap = new Map();
+        categories.forEach(item => {
+            const currentQuantity = categoryMap.has(item.category) ? categoryMap.get(item.category).quantity + item.quantity : item.quantity;
+
+            let status;
+            if (currentQuantity >= 0 && currentQuantity <= 100) {
+                status = 'Low';
+            } else if (currentQuantity > 100 && currentQuantity <= 200) {
+                status = 'Medium';
+            } else if (currentQuantity > 200 && currentQuantity <= 300) {
+                status = 'High';
+            } else {
+                status = 'Excess';
+            }
+
+            categoryMap.set(item.category, {
+                quantity: currentQuantity,
+                status: status
+            });
+        });
+
+        // console.log(categoryMap);
+        res.json([...categoryMap].map(([category, data]) => ({ ...data, category })));
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching categories' });
+    }
+});
+
 
 app.get('/donor_info', async (req, res) => {
     const publicDonors = await PublicDonor.find({});
@@ -176,6 +347,29 @@ app.get('/reciption_info', async (req, res) => {
     res.json(publicRecipients);
 });
 
+
+app.get('/api/kit-items', async (req, res) => {
+    try {
+      const items = await AidItem.find({});
+      res.json(items);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'An error occurred while fetching items' });
+    }
+});
+
+
+app.get('/api/kits', async (req, res) => {
+    try {
+        const kits = await Kit.find({});
+        // console.log(kits);
+        res.json(kits);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching kits' });
+    }
+});
+
 app.get('/add-item', (req, res) => {
     res.sendFile(__dirname + '/add_item.html');
 });
@@ -184,6 +378,38 @@ app.get('/add-item', (req, res) => {
 app.get('/add-existing-item', (req, res) => {
     res.sendFile(__dirname + '/add_existing_item.html');
 });
+
+app.get('/api/categories', async (req, res) => {
+    try {
+        const categories = await AidItem.find({}).distinct('category');
+        // console.log(categories);
+        res.json(categories);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching categories' });
+    }
+});
+
+
+app.get('/api/items', async (req, res) => {
+    try {
+        const categoryName = req.query.category_id;
+        if (!categoryName) {
+            return res.status(400).json({ error: 'category_id is required' });
+        }
+  
+        const items = await AidItem.find({ category: categoryName });
+        res.json(items);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'An error occurred while fetching items' });
+    }
+});
+
+
+  
+  
+
 
 app.get('/aid-categories', async (req, res) => {
     const aidItems = await AidItem.find({});
@@ -242,7 +468,7 @@ app.post('/donors/general', async (req, res) => {
 
     // console.log(publicDonor);
 
-    res.redirect('/donor_info.html');
+    res.redirect('/donor_private_information.html');
 });
 
 app.post('/donors/private', async (req, res) => {
@@ -312,8 +538,62 @@ app.post('/recp/general', async (req, res) => {
     const publicRecipient = new PublicRecipient({ principalRecipient, age, previousAddress, totalFamilyMembers, commonLawPartner, commonLawPartnerAge, kidsInfo });
     await publicRecipient.save();
 
-    res.redirect('/reciption_info.html');
+    res.redirect('/reciption_private_info.html');
 });
+
+app.post('/create-kit', async (req, res) => {
+    const { kit_name, item_name, quantity } = req.body;
+
+    const items = [];
+
+    // Check if there's only one item and convert it into an array
+    const itemNameArray = Array.isArray(item_name) ? item_name : [item_name];
+    const quantityArray = Array.isArray(quantity) ? quantity.map(q => parseInt(q)) : [parseInt(quantity)];
+
+    for (let i = 0; i < itemNameArray.length; i++) {
+        items.push({ itemName: itemNameArray[i], quantity: quantityArray[i] });
+    }
+
+    const kit = new Kit({ kitName: kit_name, items });
+    await kit.save();
+
+    res.redirect('/kit_review.html');
+});
+
+
+app.post('/request-kit', async (req, res) => {
+    try {
+        // console.log(req.body);
+
+        const { request_name, kit_item, details } = req.body;
+        const newRequestKit = new Requestkit({ request_name, kit_item, details });
+
+        await newRequestKit.save();
+        res.status(201).json({ message: 'Request kit created successfully', data: newRequestKit });
+    } catch (error) {
+        res.status(400).json({ message: 'Error creating request kit', error: error.message });
+    }
+});
+
+
+
+
+app.post('/request-category', async (req, res) => {
+    try {
+    //   console.log(req.body);
+  
+      const { request_name, category_name, items, details } = req.body;
+      const newRequestCategory = new Requestcategory({ request_name, category_name, item: items, details });
+  
+      await newRequestCategory.save();
+      res.status(201).json({ message: 'Request category created successfully', data: newRequestCategory });
+    } catch (error) {
+      res.status(400).json({ message: 'Error creating request category', error: error.message });
+    }
+});
+  
+
+
 
 
 

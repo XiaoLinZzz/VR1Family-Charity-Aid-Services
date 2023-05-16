@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Request Category</title>
+
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+        }
+        form {
+          width: 50%;
+          margin: 0 auto;
+          background-color: #f2f2f2;
+          padding: 20px;
+          border-radius: 10px;
+        }
+        label {
+          display: block;
+          margin-top: 10px;
+        }
+        input[type='text'],
+        textarea,
+        select {
+          width: 100%;
+          padding: 5px;
+          margin-top: 5px;
+        }
+        input[type='number'] {
+          width: 50%;
+        }
+        input[type='submit'] {
+          background-color: #4caf50;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-top: 20px;
+          float: right;
+        }
+        input[type='submit']:hover {
+          background-color: #45a049;
+        }
+        h1 {
+          text-align: center;
+        }
+        .item-field {
+          margin-bottom: 10px;
+        }
+        #add-more {
+          background-color: #007bff;
+          color: white;
+          padding: 5px 10px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-bottom: 10px;
+        }
+        #add-more:hover {
+          background-color: #0069d9;
+        }
+    </style>
+
+    <script>
+        async function fetchData() {
+          const response = await fetch('/api/categories');
+          const categories = await response.json();
+      
+          const categorySelect = document.getElementById('category_name');
+          categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.text = category;
+            categorySelect.add(option);
+          });
+      
+          // Populate items for the initial category
+          fetchItems();
+        }
+      
+        async function fetchItems() {
+          const categoryId = document.getElementById('category_name').value;
+          const response = await fetch(`/api/items?category_id=${categoryId}`);
+          const items = await response.json();
+        
+          // Update all item selects
+          const itemSelects = document.querySelectorAll('select.item-select');
+          itemSelects.forEach(itemSelect => {
+            // Clear old options
+            itemSelect.innerHTML = '';
+        
+            items.forEach(item => {
+              const option = document.createElement('option');
+              option.value = item.name; // Make sure 'id' is the correct property name
+              option.text = item.name;
+              itemSelect.add(option);
+            });
+          });
+        }
+        
+        
+      
+        function addItemField() {
+          const itemFields = document.getElementById('item-fields');
+          const newItemField = document.createElement('div');
+          newItemField.className = 'item-field';
+          newItemField.innerHTML = `
+            <label for="item_name">Item:</label>
+            <select name="item_name" class="item-select" required>
+            </select>
+            <br><br>
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" min="1" required>
+            <br><br>
+          `;
+          itemFields.appendChild(newItemField);
+      
+          // Clone options from an existing select element to the new one
+          const existingSelect = document.querySelector('select.item-select');
+          const newSelect = newItemField.querySelector('select');
+          existingSelect.childNodes.forEach(option => {
+            if (option.tagName === 'OPTION') {
+              newSelect.add(option.cloneNode(true));
+            }
+          });
+        }
+      
+        async function submitForm(form) {
+          event.preventDefault();
+        
+          const formData = new FormData(form);
+        
+          // Retrieve request_name and category_name from formData
+          const request_name = formData.get('request_name');
+          const category_name = formData.get('category_name');
+        
+          // Retrieve all item_name and quantity input fields
+          const item_nameFields = form.querySelectorAll('select[name="item_name"]');
+          const quantityFields = form.querySelectorAll('input[name="quantity"]');
+        
+          // Create an array for items
+          const items = [];
+        
+          // Iterate over item_name and quantity input fields to create items objects
+          for (let i = 0; i < item_nameFields.length; i++) {
+            items.push({
+              name: item_nameFields[i].options[item_nameFields[i].selectedIndex].text,
+              quantity: parseInt(quantityFields[i].value),
+            });
+          }
+        
+          // Create the request body object
+          const data = {
+            request_name,
+            category_name,
+            items,
+            details: formData.get('details'),
+          };
+        
+          try {
+            const response = await fetch('/request-category', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            });
+        
+            if (response.ok) {
+              // Show a success message
+              alert('Request submitted successfully.');
+              // Redirect to the home page
+              window.location.href = '/';
+            } else {
+              // Show an error message if the response is not ok
+              alert('Error submitting request. Please try again.');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            // Show an error message if there's an exception
+            alert('Error submitting request. Please try again.');
+          }
+        
+          return false;
+        }
+        
+      </script>
+      
+
+  </head>
+  <body onload="fetchData()">
+    <h1>Request Category</h1>
+
+    <form action="/request-category" method="POST" onsubmit="return submitForm(this)">
+      <label for="request_name">Your Name:</label>
+      <input type="text" id="request_name" name="request_name" required>
+      <br><br>
+
+      <label for="category_name">Category:</label>
+      <select id="category_name" name="category_name" onchange="fetchItems()" required>
+        <!-- Category options will be populated by JavaScript -->
+      </select>
+      <br><br>
+
+      <div id="item-fields">
+        <div class="item-field">
+          <label for="item_name">Item:</label>
+          <select id="item_name" name="item_name" class="item-select" required>
+            <!-- Item options will be populated by JavaScript -->
+          </select>
+          <br><br>
+          <label for="quantity">Quantity:</label>
+          <input type="number" id="quantity" name="quantity" min="1" required>
+          <br><br>
+        </div>
+      </div>
+
+      <button type="button" id="add-more" onclick="addItemField()">Add More Items</button>
+      <br>
+      <label for="details">Details:</label>
+      <textarea id="details" name="details" rows="4" cols="50"></textarea>
+      <br><br>
+
+      <input type="submit" value="Send Request">
+    </form>
+  </body>
+</html>

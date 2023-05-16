@@ -29,16 +29,17 @@
     </style>
     <script>
         async function fetchData() {
-            const response = await fetch('/aid-items');
+            const response = await fetch('/api/kits');
             const aidItems = await response.json();
 
-            const table = document.getElementById('aid-items-table');
+            const table = document.getElementById('kit-items-table');
             aidItems.forEach(item => {
                 const row = table.insertRow(-1);
-                row.insertCell(0).innerText = item.name;
-                row.insertCell(1).innerText = item.category;
-                row.insertCell(2).innerText = item.quantity;
-                row.insertCell(3).innerText = item.details;
+                row.insertCell(0).innerText = item.kitName;
+                // row.insertCell(1).innerText = item.status;
+                
+                const itemsString = item.items.map(i => `${i.itemName}: ${i.quantity}`).join(', ');
+                row.insertCell(1).innerText = itemsString;
             });
         }
     </script>
@@ -49,15 +50,14 @@
 </head>
 <body onload="fetchData()">
     <div class="container">
-        <h1 class="mt-4 mb-4">Category Review <button type="submit" class="btn btn-primary" onclick="window.open('category_overview.html', '_self')">Overview</button> </h1>
+        <h1 class="mt-4 mb-4">Kit Management</h1>
 
-        <table class="table table-striped" id="aid-items-table">
+        <table class="table table-striped" id="kit-items-table">
             <thead>
                 <tr>
-                    <th>Item Name</th>
-                    <th>Category</th>
-                    <th>Quantity</th>
-                    <th>Details</th>
+                    <th>kit Name</th>
+                    <!-- <th>Status</th> -->
+                    <th>Items, Quantity</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,11 +65,11 @@
         </table>
         <!-- Update the buttons -->
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <form action="/add-item" method="GET">
-                <button type="submit" class="btn btn-primary">Create Category</button>
-            </form>
-            <form action="/add-existing-item" method="GET" class="mt-3">
-                <button type="submit" class="btn btn-secondary">Add Item</button>
+            <!-- <form action="/create_kit.html" method="GET">
+                <button type="submit" class="btn btn-primary">Create Kit</button>
+            </form> -->
+            <form action="/items_in_kit.html" method="GET" class="mt-3">
+                <button type="submit" class="btn btn-primary">Create Kit</button>
             </form>
         </div>
     </div>

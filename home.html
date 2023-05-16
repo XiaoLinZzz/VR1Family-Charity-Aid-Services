@@ -17,14 +17,15 @@
         }
         .card-container {
             display: flex;
-            justify-content: space-around;
+            justify-content: flex-start;
             flex-wrap: wrap;
             margin-top: 50px;
             margin-bottom: 50px;
         }
+        
         .card {
-            width: 100%;
-            max-width: 300px;
+            flex-basis: 300px;
+            flex-grow: 1;
             margin-bottom: 30px;
             border: none;
             border-radius: 12px;
@@ -37,6 +38,7 @@
         }
         .card-body {
             padding: 25px;
+            text-align: center;
         }
         .btn {
             border-radius: 8px;
@@ -54,66 +56,138 @@
             display: flex;
             justify-content: center;
         }
+        .user-switch {
+            z-index: 999;
+        }
+        
+        .custom-control-label:before {
+            background-color: #007bff;
+            border: none;
+        }
+        
+        .custom-control-label:after {
+            background-color: #007bff;
+            border: none;
+        }
+        
+        .user-admin-dropdown {
+            z-index: 999;
+        }
+        
+        .current-role {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .btn-transparent {
+            background-color: transparent;
+        }
+        .user-admin-dropdown {
+            z-index: 999;
+            margin-right: 2rem;
+        }
+        .logo {
+            width: 100%;
+            max-width: 300px;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 40px;
+        }
+        
+        
+
+
     </style>
     <!-- Add Bootstrap JavaScript and jQuery -->
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Add Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
+
+    <script>
+        $(document).ready(function () {
+            const storedRole = localStorage.getItem('currentRole');
+            if (storedRole) {
+                $(".current-role").text(storedRole);
+            }
+
+            $("#userOption, #adminOption").on("click", function () {
+                const selectedRole = $(this).text();
+                $(".current-role").text(selectedRole);
+                // Store the current role in localStorage
+                localStorage.setItem('currentRole', selectedRole);
+            });
+
+            // Check user role before opening the Info pages
+            function openInfoPage(pageUrl) {
+                if ($(".current-role").text() === "Admin") {
+                    window.open(pageUrl, "_self");
+                } else {
+                    alert("You must be an Admin to access this page.");
+                }
+            }
+
+            // Bind the openInfoPage function to the Info buttons
+            $("#recipientsInfoBtn, #donorsInfoBtn, #kit_info, #Category_info").on("click", function () {
+                openInfoPage($(this).data("page-url"));
+            });
+        });
+    </script>
+
+    <div class="user-admin-dropdown float-right mt-2">
+        <div class="dropdown">
+            <button class="btn btn-transparent dropdown-toggle p-0 border-0" type="button" id="userAdminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user-circle fa-2x"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userAdminDropdown">
+                <a class="dropdown-item" href="#" id="userOption">User</a>
+                <a class="dropdown-item" href="#" id="adminOption">Admin</a>
+            </div>
+        </div>
+        <span class="current-role ml-2">User</span>
+    </div>
+    
+    
+    
+    
     <div class="container">
         <h1 class="mt-4 mb-4">VR1Family Charity Aid Services</h1>
 
-        <!-- <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img class="d-block w-100" src="image/pic1.png" alt="First slide">
-              </div>
-              <div class="carousel-item">
-                <img class="d-block w-100" src="image/pic2.png" alt="Second slide">
-              </div>
-              <div class="carousel-item">
-                <img class="d-block w-100" src="image/pic3.png" alt="Third slide">
-              </div>
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div> -->
-          
+        <figure>
+            <img src="/image/download.png" alt="picture" class="logo">
+        </figure>
+
 
         <div class="card-container">
-            <!-- Card 1 -->
-            <div class="card">
+
+            <div class="card mx-auto">
                 <div class="card-body">
                     <h5 class="card-title">About Us</h5>
-                    <p class="card-text">Description of Page 1.</p>
-                    <!-- <a href="/about_us.html" class="btn btn-primary">Go to Page 1</a> -->
+                    <p class="card-text">Description of About Us.</p>
                     <button type="submit" class="btn btn-primary" onclick="window.open('about_us.html')">Go to About Us</button>
                 </div>
             </div>
+
             <!-- Card 2 -->
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Aid Recipients</h5>
                     <p class="card-text">Description of Page 2.</p>
                     <div>
-                        <button type="submit" class="btn btn-primary" onclick="window.open('reciption_info.html', '_self')">Info</button>
-                        <button type="submit" class="btn btn-primary" onclick="window.open('reciption_private_info.html', '_self')">Private</button>
-                        <button type="submit" class="btn btn-primary" onclick="window.open('reciption_general_info.html', '_self')">General</button>
+                        <button type="submit" class="btn btn-primary" id="recipientsInfoBtn" data-page-url="reciption_info.html">Recipients Info</button>
+                        <!-- <button type="submit" class="btn btn-primary" onclick="window.open('reciption_private_info.html', '_self')">Private</button> -->
+                        <button type="submit" class="btn btn-primary" onclick="window.open('reciption_general_info.html', '_self')">Submit Information</button>
                     </div>
                 </div>
             </div>
+            
             <!-- Card 3 -->
             <div class="card">
                 <div class="card-body">
@@ -122,26 +196,43 @@
                     <!-- <a href="donor_general_information.html" class="btn btn-primary">General Donors</a>
                     <a href="donor_private_information.html" class="btn btn-primary">Private Donors</a> -->
                     <!-- buttons of private & genral donors -->
-                    <div>
-                        <!-- open in a new page -->
-                        <!-- <button type="submit" class="btn btn-primary" onclick="window.open('donor_info.html')">Info</button>
-                        <button type="submit" class="btn btn-primary" onclick="window.open('donor_private_information.html')">Private</button>
-                        <button type="submit" class="btn btn-primary" onclick="window.open('donor_general_information.html')">General</button> -->
-                        
+                    <div>                        
                         <!-- open in the same page -->
-                        <button type="submit" class="btn btn-primary" onclick="location.href='donor_info.html';">Info</button>
-                        <button type="submit" class="btn btn-primary" onclick="location.href='donor_private_information.html';">Private</button>
-                        <button type="submit" class="btn btn-primary" onclick="location.href='donor_general_information.html';">General</button>
+                        <button type="submit" class="btn btn-primary" id="donorsInfoBtn" data-page-url="donor_info.html">Aid Donors Info</button>
+                        <!-- <button type="submit" class="btn btn-primary" onclick="location.href='donor_private_information.html';">Private</button> -->
+                        <button type="submit" class="btn btn-primary" onclick="location.href='donor_general_information.html';">Submit Information</button>
                     </div>
                 </div>
             </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Kit Management</h5>
+                    <p class="card-text">Description of Kit Management.</p>
+                    <button type="submit" class="btn btn-primary" onclick="location.href='request_kit.html'">Request</button>
+                    <button type="submit" class="btn btn-primary" id="kit_info" data-page-url='kit_review.html'>Go to Kit Management</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Category Review</h5>
+                    <p class="card-text">Description of Kit Management.</p>
+                    <button type="submit" class="btn btn-primary" onclick="location.href='request_category.html'">Request</button>
+                    <button type="submit" class="btn btn-primary" id="Category_info" data-page-url='category_review.html';>Go to Category Management</button>
+                </div>
+                
+            </div>
+
+
+
         </div>
         <!-- Link to Category Review -->
         <!-- <a href="category_review.html" class="btn btn-secondary mt-4">Category Review</a> -->
-        <div class="category-review-btn">
-            <!-- <button type="submit" class="btn btn-secondary mt-4" onclick="window.open('category_review.html')">Category Review</button> -->
+        <!-- <div class="category-review-btn">
+            <button type="submit" class="btn btn-secondary mt-4" onclick="window.open('category_review.html')">Category Review</button>
             <button type="submit" class="btn btn-secondary mt-4" onclick="location.href='category_review.html';">Category Review</button>
-        </div>
+        </div> -->
     </div>
 </body>
 </html>
