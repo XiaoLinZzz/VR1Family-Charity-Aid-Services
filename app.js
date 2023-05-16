@@ -150,6 +150,9 @@ const request_kitSchema = new mongoose.Schema({
         required: true,
     },
     kit_item: [requestkititemSchema],
+    details: {
+        type: String,
+    },
 });
 
 
@@ -185,6 +188,9 @@ const request_categorySchema = new mongoose.Schema({
             },
         },
     ],
+    details: {
+        type: String,
+    },
 });
 
 
@@ -216,6 +222,11 @@ app.get('/', (req, res) => {
 app.get('/request_category.html', (req, res) => {
     res.sendFile(__dirname + '/request_category.html');
 });
+
+app.get('/category_overview.html', (req, res) => {
+    res.sendFile(__dirname + '/category_overview.html');
+});
+
 
 app.get('/category_review.html', (req, res) => {
     res.sendFile(__dirname + '/category_review.html');
@@ -280,6 +291,41 @@ app.get('/aid-items', async (req, res) => {
     const aidItems = await AidItem.find({});
     res.json(aidItems);
 });
+
+app.get('/api/get-categories', async (req, res) => {
+    try {
+        const categories = await AidItem.find({})
+
+        // Sum up the same category, and set a status
+        const categoryMap = new Map();
+        categories.forEach(item => {
+            const currentQuantity = categoryMap.has(item.category) ? categoryMap.get(item.category).quantity + item.quantity : item.quantity;
+
+            let status;
+            if (currentQuantity >= 0 && currentQuantity <= 100) {
+                status = 'Low';
+            } else if (currentQuantity > 100 && currentQuantity <= 200) {
+                status = 'Medium';
+            } else if (currentQuantity > 200 && currentQuantity <= 300) {
+                status = 'High';
+            } else {
+                status = 'Excess';
+            }
+
+            categoryMap.set(item.category, {
+                quantity: currentQuantity,
+                status: status
+            });
+        });
+
+        // console.log(categoryMap);
+        res.json([...categoryMap].map(([category, data]) => ({ ...data, category })));
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching categories' });
+    }
+});
+
 
 app.get('/donor_info', async (req, res) => {
     const publicDonors = await PublicDonor.find({});
@@ -511,8 +557,8 @@ app.post('/request-kit', async (req, res) => {
     try {
         // console.log(req.body);
 
-        const { request_name, kit_item } = req.body;
-        const newRequestKit = new Requestkit({ request_name, kit_item });
+        const { request_name, kit_item, details } = req.body;
+        const newRequestKit = new Requestkit({ request_name, kit_item, details });
 
         await newRequestKit.save();
         res.status(201).json({ message: 'Request kit created successfully', data: newRequestKit });
@@ -528,8 +574,8 @@ app.post('/request-category', async (req, res) => {
     try {
     //   console.log(req.body);
   
-      const { request_name, category_name, items } = req.body;
-      const newRequestCategory = new Requestcategory({ request_name, category_name, item: items });
+      const { request_name, category_name, items, details } = req.body;
+      const newRequestCategory = new Requestcategory({ request_name, category_name, item: items, details });
   
       await newRequestCategory.save();
       res.status(201).json({ message: 'Request category created successfully', data: newRequestCategory });

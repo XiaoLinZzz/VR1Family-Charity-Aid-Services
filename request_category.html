@@ -154,6 +154,7 @@
             request_name,
             category_name,
             items,
+            details: formData.get('details'),
           };
         
           try {
@@ -213,8 +214,13 @@
           <br><br>
         </div>
       </div>
+
       <button type="button" id="add-more" onclick="addItemField()">Add More Items</button>
       <br>
+      <label for="details">Details:</label>
+      <textarea id="details" name="details" rows="4" cols="50"></textarea>
+      <br><br>
+
       <input type="submit" value="Send Request">
     </form>
   </body>

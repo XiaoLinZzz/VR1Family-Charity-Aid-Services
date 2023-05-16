@@ -117,6 +117,7 @@
         // Retrieve all kit_name and quantity input fields
         const kit_nameFields = form.querySelectorAll('select[name="kit_name"]');
         const quantityFields = form.querySelectorAll('input[name="quantity"]');
+        const details = formData.get('details');
       
         // Create an array for kit_item
         const kit_item = [];
@@ -133,6 +134,7 @@
         const data = {
           request_name,
           kit_item,
+          details,
         };
       
         try {
@@ -187,6 +189,9 @@
       </div>
       <button type="button" id="add-more" onclick="addItemField()">Request More Kits</button>
       <br>
+      <label for="details">Details:</label>
+      <textarea id="details" name="details" rows="4" cols="50"></textarea>
+      <br><br>
       <input type="submit" value="Create Kit">
     </form>
   </body>
