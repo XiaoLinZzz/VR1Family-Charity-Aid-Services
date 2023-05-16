@@ -503,7 +503,7 @@ app.post('/donors/private', async (req, res) => {
     const privateDonor = new PrivateDonor(donorData);
     await privateDonor.save();
 
-    res.redirect('/donor_info.html');
+    res.redirect('/');
 });
 
 app.post('/recp/private', upload.array('identity-documents'), async (req, res) => {
@@ -523,7 +523,7 @@ app.post('/recp/private', upload.array('identity-documents'), async (req, res) =
     const privateRecipient = new PrivateRecipient({ nationality, identityDocuments, identityDocuments: documentDetails });
     await privateRecipient.save();
 
-    res.redirect('/reciption_info.html');
+    res.redirect('/');
 });
 
 app.post('/recp/general', async (req, res) => {
