@@ -8,7 +8,7 @@ This repository is our final project for the course [SWEN90016 Software Processe
 ![Node.js](https://img.shields.io/static/v1?label=Node.js&message=v14.16.0&color=339933&style=for-the-badge&logo=Node.js)
 ![MongoDB](https://img.shields.io/static/v1?label=MongoDB&message=v4.4.4&color=47A248&style=for-the-badge&logo=MongoDB)
 ![Express](https://img.shields.io/static/v1?label=Express&message=v4.17.1&color=000000&style=for-the-badge&logo=Express)
-![Heroku](https://img.shields.io/static/v1?label=Express&message=V8.1.3&color=430098&style=for-the-badge&logo=Heroku)
+![Heroku](https://img.shields.io/static/v1?label=Heroku&message=V8.1.3&color=430098&style=for-the-badge&logo=Heroku)
 
 
 ## Try our application
