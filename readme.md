@@ -19,6 +19,10 @@ This repository is our final project for the course [SWEN90016 Software Processe
 ### Watch our demo
 
 
+https://github.com/XiaoLinZzz/VR1Family-Charity-Aid-Services/assets/65701285/6f748675-348b-4ed9-a9bf-ba3d957919de
+
+
+
 Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/). (Due to there is a charge for using Heroku, our demo will expire in June 2023.)
 
 
