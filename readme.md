@@ -11,7 +11,7 @@ This repository is our final project for the course [SWEN90016 Software Processe
 ![Heroku](https://img.shields.io/static/v1?label=Heroku&message=V8.1.3&color=430098&style=for-the-badge&logo=Heroku)
 
 
-## Try our application
+## Demo
 
 <!-- add screenshot -->
 <!-- ![screenshot](image/screenshot.png) -->
@@ -21,7 +21,7 @@ This repository is our final project for the course [SWEN90016 Software Processe
 
 https://github.com/XiaoLinZzz/VR1Family-Charity-Aid-Services/assets/65701285/6f748675-348b-4ed9-a9bf-ba3d957919de
 
-
+### Try our demo
 
 Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/). (Due to there is a charge for using Heroku, our demo will expire in June 2023.)
 
