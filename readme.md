@@ -23,7 +23,9 @@ https://github.com/XiaoLinZzz/VR1Family-Charity-Aid-Services/assets/65701285/6f7
 
 ### Try our demo
 
-Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/). (Due to there is a charge for using Heroku, our demo will expire in June 2023.)
+Our application is deployed on Heroku. You can try it out [here](https://spmproject.herokuapp.com/). 
+
+(Due to there is a charge for using Heroku, our demo will expire in June 2023.)
 
 
 ## Features
