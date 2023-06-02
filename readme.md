@@ -16,7 +16,7 @@ This repository is our final project for the course [SWEN90016 Software Processe
 <!-- add screenshot -->
 <!-- ![screenshot](image/screenshot.png) -->
 
-### Watch our demo
+### Watch our demo (5 mins)
 
 
 
